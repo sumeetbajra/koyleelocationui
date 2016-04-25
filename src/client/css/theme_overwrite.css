@@ -1,0 +1,337 @@
+#page-wrapper {
+    margin-top: 50px;
+}
+
+.container {
+    width: 100%;
+}
+
+#header-navbar {
+    padding: 0;
+    position: fixed;
+    z-index: 999 !important;
+}
+
+#header-navbar a{
+    color: white;
+}
+
+#header-navbar>.container .navbar-brand{
+    background: none;
+    height: 50px;
+    position: absolute;
+}
+
+#header-navbar>.container .navbar-brand img {
+    margin-top: 5px;
+}
+
+#header-navbar .profile-dropdown>a{
+    padding-top: 8px;
+    padding-bottom: 7px;
+}
+
+.navbar .navbar-nav > li > a {
+    padding-top: 15px;
+    margin: 0;
+    padding-bottom: 15px;
+}
+
+#header-navbar .nav>li>a:hover,
+#header-navbar .nav>li>a:focus,
+#header-navbar .nav .open>a,
+#header-navbar .nav .open>a:hover,
+#header-navbar .nav .open>a:focus {
+    background: #16a085;
+}
+
+#header-navbar .dropdown-menu li > a, #header-navbar.navbar-default .dropdown-menu li > a,
+#header-navbar .dropdown-menu li > .anchor{
+    font-size: 12px;
+    padding: 8px 35px;
+}
+
+#header-navbar .dropdown-menu>li>a {
+    color: #707070;
+}
+
+#header-navbar .notifications-list .item-footer a {
+    color: white;
+}
+
+#header-navbar .notifications-list .item-footer a:hover {
+    background-color: #16a085;
+}
+
+#header-nav .form-group.is-focused .form-control {
+    background: white;
+}
+
+#homepage-form .form-control {
+    font-size: 16px;
+}
+
+.form-control:focus{
+    outline: none !important;
+    border-color: none !important;
+    box-shadow: none !important;
+}
+
+#verify-form h3{
+    border: none;
+    padding-left: 0;
+}
+
+#user-left-box .user-box>.name>a:hover,
+#user-left-box .user-box>.name>a:active,
+#user-left-box .user-box>.name>a:visited {
+    color:black;
+}
+
+#nav-col {
+    z-index: 10;
+    height: 100%;
+    position: fixed;
+}
+
+#header-navbar .profile-dropdown>a>img,
+#header-navbar .profile-dropdown>.anchor>img {
+    border: none;
+}
+
+.messages-list .item>a>img,
+.messages-list .item>.anchor>img  {
+    position: absolute;
+    margin-left: -18px;
+    margin-top: 10px;
+}
+
+#meet-requests .item>.anchor>.content .content-headline {
+    position: relative;
+    top: 4px;
+}
+
+#meet-requests .content-text button:nth-child(1) {
+    margin-right: 5px;
+    border: solid thin #EDEDED;
+}
+
+#meet-requests .item>.anchor>.content {
+    display: block;
+    padding-left: 50px;
+    padding-top: 5px;
+}
+
+#meet-requests .item>.anchor>.content .content-headline {
+    color: #605F5F;
+    display: block;
+    font-weight: 600;
+    padding-bottom: 2px;
+}
+
+#meet-requests .item>a>.content .content-text {
+    display: block;
+    line-height: 1.4;
+}
+
+.btn i {
+    position: relative;
+    top: -1px;
+    margin-right: 4px;
+}
+
+#newsfeed .story {
+    padding: 0;
+    margin: 0 15px;
+    border-bottom: none;
+}
+
+.main-box {
+    padding: 20px 0;
+}
+
+#search-results-detail {
+    padding: 20px;
+}
+
+.main-box h2 {
+    text-align: center;
+}
+
+#user-profile .profile-details {
+    padding: 0 !important;
+    border-bottom: none !important;
+}
+
+.main-box .profile-details ul {
+    margin-left: 0 !important;
+}
+
+.main-box .profile-details ul li a{
+    padding: 10px 10px 10px 25px;
+    border-bottom: solid thin #ECECEC;
+    width: 100%;
+    display: block;
+    text-decoration: none;
+}
+
+.main-box .profile-details ul li a:hover, 
+.main-box .profile-details ul li a:visited,  
+.main-box .profile-details ul li a:active,  
+.main-box .profile-details ul li.active a{
+    border-left: solid 2px #1ABC9C;
+    padding-left: 23px;
+    text-decoration: none
+}
+
+#user-profile .profile-details ul>li>a span{
+    color: #5D5D5D;
+    margin-left: 10px;
+}
+
+#user-profile .profile-details ul>li>a i {
+    color: #5D5D5D;
+}
+
+#user-profile h2 {
+    padding-right: 0;
+}
+
+.mobile-search.active .drowdown-search{
+    width: 350px !important;
+    left: 0px !important;
+    height: 50px !important;
+}
+
+.mobile-search.active{
+    width: 350px !important;
+}
+
+#searchResultItem {
+    padding: 5px 15px !important;
+}
+
+#searchResultName {
+    height: 100%;
+    padding: 0 6px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#userSearchDropdown {
+    width: 350px;
+}
+
+#userSearchDropdown .item-footer {
+    background: #1ABC9C;
+    padding-bottom: 0;
+    padding-top: 0;
+    border-radius: 0 0 3px 3px;
+    background-clip: padding-box;
+    margin: 10px 0 -5px;
+    text-align: center;
+}
+
+#userSearchDropdown .item-footer a {
+    color: white !important;
+}
+
+#userSearchDropdown .item-footer a:hover {
+    background-color: #16a085;
+}
+
+#search-results-detail header h2, #bundle-list header h2 {
+    text-align: left;
+}
+
+#bundle-list header h2 {
+    color: #f44336;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+
+#search-form .input-group-btn button {
+    height: 32px;
+    font-size: 12px;
+}   
+
+#search-results {
+    margin: 25px 0;
+    min-height: 40px;
+}    
+
+#search-results li {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: solid thin #ECECEC;
+    z-index: 100;
+    position: relative;
+    background: white;
+}
+
+#search-results li .search-img {
+    margin-right: 17px;
+}
+
+#search-results li .meta-info {
+    margin-top: 2px;
+}
+
+#search-results li a.title {
+    color: #4CAF50;;
+    font-weight: bold;
+}
+
+#search-results .meta-info .userLabel {
+    position: relative;
+    top: -3px;
+    z-index: 1;
+}
+
+#search-results button {
+    margin-top: 3px;
+    padding: 6px;
+    font-size: 11px;
+}
+
+#content-wrapper {
+    min-height: 90vh;
+}
+
+.main-box .main-box-body {
+    padding: 0 20px;
+}
+
+.radio label:before {
+    display:none;
+}
+
+.option-label {
+    width: 100%;
+    position: relative !important;
+    top: 1px !important;
+    font-size: 13px;
+    left: 5px !important;
+}
+
+.timeline-nav .btn-group .btn {
+    background: white;
+    border-radius: 0 !important;
+    padding: 9px 10px 7px 14px;
+    font-size: 12px;
+    text-transform: none;
+    border: solid thin #ECECEC;
+}
+
+.timeline-nav .btn-group .dropdown-toggle:active, 
+.timeline-nav .btn-group .dropdown-toggle:visited,
+.timeline-nav .btn-group .dropdown-toggle {
+    border: solid thin #ECECEC !important;
+}
+
+.notifications-list .item a .time {
+    display: inline-block !important;
+    position: relative !important;
+    margin: 7px 0 0!important;
+}
+
