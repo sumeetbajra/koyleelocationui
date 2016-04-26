@@ -96,6 +96,23 @@ module.exports = {
                 responseCallback(null, textStatus);
             }
         });
+    },
+
+    createUserSession: function(payload, responseCallback) {
+        request({
+            url: APIEndpoints.LOGIN,
+            headers: headers({
+                'contentType': 'application/json'
+            }),
+            data: JSON.stringify(payload),
+            method: 'POST',
+            success: function(res){
+                responseCallback(res, null);
+            },
+            failure: function(jqXHR, textStatus) {
+                responseCallback(null, textStatus);
+            }
+        });
     }
     
 };

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Autocomplete from 'react-autocomplete';
 import DateTimeField from 'react-bootstrap-datetimepicker';
 import moment from 'moment';
 import { Link } from 'react-router';
+import textcomplete from 'jquery-textcomplete';
 
 import * as EnumConstants from '../constants/EnumConstants';
 import { APIEndpoints } from '../constants/CommonConstants';
@@ -17,6 +17,7 @@ class EventCreate extends Component {
             participants: [],
             loading: false,
             value: '',
+            ownerValue: '',
             eventParticipants: [],
             isPublic: false,
             checkNextDays: true,
@@ -35,6 +36,30 @@ class EventCreate extends Component {
 
     componentDidMount() {
         $.material.checkbox();
+        $('.textcomplete').textcomplete([{
+            match: /(^|\s)(\w{0,})$/,
+            search: function (term, callback) {
+                $.ajax({
+                    url: APIEndpoints.SEARCH_USER,
+                    headers: {
+                        'Authorization': localStorage.getItem('token'),
+                    },
+                    data: {'s': 8, 'q': term},
+                    method: 'GET',
+                    success: function(res){
+                        var participants = $.map(res.response, function (user, key) {
+                            var fullName = user.firstName + ' ' + user.lastName;
+                            return fullName.toLowerCase().indexOf(term.toLowerCase()) === 0 ? fullName : null;
+                        });
+
+                        callback(participants);
+                    }
+                });
+            },
+            replace: function (word) {
+                return word + ' ';
+            },
+        }]);
     }
 
     handleSubmit(e) {
@@ -100,9 +125,10 @@ class EventCreate extends Component {
             menu: {
                 border: 'solid 1px #ccc'
             }
-        }
+        }       
+
         return (
-            <form className="form-horizontal col-sm-8 col-sm-offset-2" id="createEvent" onSubmit={this.handleSubmit} autocomplete="off">
+            <form className="form-horizontal col-sm-8 col-sm-offset-2" id="createEvent" onSubmit={this.handleSubmit} autoComplete="off">
                 <div className="form-group">
                     <h4>Create Event</h4><hr/>
                 </div>
@@ -113,47 +139,12 @@ class EventCreate extends Component {
                  <div className="form-group">
                     <div className="row">
                         <div className="col-sm-6">
-                            <Autocomplete
-                                labelText="Owner"
-                                inputProps={{name: "ownerId", className: "input form-control", placeholder: "Search user"}}
-                                ref="autocomplete"
-                                value={this.state.ownerId}
-                                items={this.state.participants}
-                                getItemValue={(item) => item.firstName + ' ' + item.lastName}
-                                onSelect={(value, item) => {
-                                    // set the menu to only the selected item
-                                    this.setState({ ownerId: item.userId, participants: [ item ] })
-                                    // or you could reset it to a default list again
-                                    // this.setState({ unitedStates: getStates() })
-                                }}
-                                onChange={(event, value) => {
-                                    this.setState({ value, loading: true });
-                                    var that = this;
-                                    $.ajax({
-                                        url: APIEndpoints.SEARCH_USER,
-                                        headers: {
-                                            'Authorization': localStorage.getItem('token'),
-                                        },
-                                        data: {'s': 8, 'q': value},
-                                        method: 'GET',
-                                        success: function(res){
-                                            that.setState({ participants: res.response, loading: false });
-                                        }
-                                    });
-                                }}
-                                renderItem={(item, isHighlighted) => (
-                                    <div
-                                        style={isHighlighted ? styles.highlightedItem : styles.item}
-                                        key={item.userId}
-                                        id={item.userId}
-                                    >{item.firstName} {item.lastName}</div>
-                                )}
-                            />
+                            <label htmlFor="owner">Owner</label>
+                            <input type="text" name="owner" className="input form-control textcomplete" placeholder="Owner"/>
                         </div>
                         <div className="col-sm-6">
                             <label htmlFor="eventType">Event Type</label>
-                            <select name="eventType" className="form-control">
-                                <option value="">--Select event type--</option>
+                            <select name="eventType" className="form-control" defaultValue="General">
                                 {EnumConstants.EventType.map((type, key) => {
                                     return (<option key={key} value={type}>{type}</option>);
                                 })}
@@ -164,45 +155,8 @@ class EventCreate extends Component {
                  <div className="form-group">
                     <div className="row">
                         <div className="col-sm-6">
-                            <Autocomplete
-                                labelText="Participants"
-                                inputProps={{name: "participants", className: "input form-control", placeholder: "Add participants"}}
-                                ref="autocomplete"
-                                value={this.state.eventParticipants}
-                                items={this.state.participants}
-                                getItemValue={(item) => item.firstName + ' ' + item.lastName}
-                                onSelect={(value, item) => {
-                                    // set the menu to only the selected item
-                                    this.setState({ eventParticipants: this.state.eventParticipants.concat([item]), participants: [], value: '' });
-                                    setTimeout(function() {
-                                        $('input[name="participants"]').val('');
-                                    });
-                                    // or you could reset it to a default list again
-                                    // this.setState({ unitedStates: getStates() })
-                                }}
-                                onChange={(event, value) => {
-                                    this.setState({ value, loading: true });
-                                    var that = this;
-                                    $.ajax({
-                                        url: APIEndpoints.SEARCH_USER,
-                                        headers: {
-                                            'Authorization': localStorage.getItem('token'),
-                                        },
-                                        data: {'s': 8, 'q': value},
-                                        method: 'GET',
-                                        success: function(res){
-                                            that.setState({ participants: res.response, loading: false });
-                                        }
-                                    });
-                                }}
-                                renderItem={(item, isHighlighted) => (
-                                    <div
-                                        style={isHighlighted ? styles.highlightedItem : styles.item}
-                                        key={item.userId}
-                                        id={item.userId}
-                                    >{item.firstName} {item.lastName}</div>
-                                )}
-                            />
+                            <label htmlFor="participants">Participants</label>
+                            <input type="text" name="participants" className="input form-control textcomplete" placeholder="Add participants"/>
                             <div style={{margin: '20px 0 10px'}}>
                                 {this.state.eventParticipants.map( (participant) => {
                                     return (<span className="selected">{participant.firstName} {participant.lastName} <a href="#" onClick={this.removeParticipant.bind(this, participant.userId)}>X</a></span>);
@@ -211,7 +165,7 @@ class EventCreate extends Component {
                         </div>
                         <div className="col-sm-6">
                             <label htmlFor="eventStatus">Event Status</label>
-                            <select name="eventStatus" className="form-control">
+                            <select name="eventStatus" className="form-control" defaultValue="pending">
                                 <option value="">--Select event status--</option>
                                 <option value="ok">OK</option>
                                 <option value="pending">Pending</option>
@@ -245,7 +199,7 @@ class EventCreate extends Component {
                     <div className="row">
                         <div className="col-sm-6">
                             <label htmlFor="accommodation">Accommodation</label>
-                            <select name="accommodation" className="form-control">
+                            <select name="accommodation" className="form-control" defaultValue="5">
                                 <option value="">--Accommodation--</option>
                                 <option value="1">1</option>
                                 <option value="5">5</option>

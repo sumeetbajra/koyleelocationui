@@ -15,7 +15,7 @@ var MapControl = React.createClass({
         return {
             events: null,
             userId: localStorage.getItem('uuid'),
-            fromDate: localStorage.getItem('payload') && JSON.parse(localStorage.getItem('payload')).fromDate ? JSON.parse(localStorage.getItem('payload')).fromDate : moment(Date.now()).format('YYYY/MM/DD'),
+            fromDate: JSON.parse(localStorage.getItem('payload')) && JSON.parse(localStorage.getItem('payload')).fromDate ? JSON.parse(localStorage.getItem('payload')).fromDate : moment(Date.now()).format('YYYY/MM/DD'),
             toDate: null,
             showAll: true,
             homeLocation: true,

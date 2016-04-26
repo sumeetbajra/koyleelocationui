@@ -10,6 +10,7 @@ module.exports = {
         GET_ROUTE: iloopAPIRoot + '/traffic/route',
         SEARCH_USER: iloopAPIRoot + '/user/search',
         CREATE_EVENT: APIRoot + '/create',
+        LOGIN: iloopAPIRoot + '/login',
     },
     AccessToken: 'NGYwYzFkZDNkMTgyNGY4N2E5MTVhMjIzYzBmNDUzY2YkXyQwMmJlNGQzNGIwODY0NDc0YTljYmVhYzhhMTVjZmFkNiRfJDAkXyQx',
 
@@ -39,7 +40,9 @@ module.exports = {
        SET_MARKERS: null,
        SET_RESET_FALSE: null,
        CREATE_EVENT_REQUEST: null,
-       CREATE_EVENT_RESPONSE: null
+       CREATE_EVENT_RESPONSE: null,
+       CREATE_USER_SESSION_REQUEST: null,
+       CREATE_USER_SESSION_RESPONSE: null
     })
 
 };

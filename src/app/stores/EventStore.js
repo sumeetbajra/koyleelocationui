@@ -33,6 +33,9 @@ EventStore.dispatchToken = KoyleeDispatcher.register(function(payload) {
     switch(action.type) {
 
         case ActionTypes.GET_EVENTS_RESPONSE:
+            if(!action.res) {
+                console.log('Invalid request.');
+            }
             if(!action.res.error) {
                 _events = action.res;
             }
@@ -42,10 +45,22 @@ EventStore.dispatchToken = KoyleeDispatcher.register(function(payload) {
         case ActionTypes.CREATE_EVENT_RESPONSE:
             if(!action.res.error) {
                 _events = action.res;
-                location.hash = '/';
+                if(_events.eventFromTimestamp) {
+                    localStorage.setItem('payload', {
+                        userId:_events.ownerId,
+                        fromDate: moment(_events.eventFromTimestamp).format('YYYY/MM/DD'),
+                        toDate: moment(_events.eventToTimestamp).format('YYYY/MM/DD'),
+                        getAll:true,
+                        getHome:true,
+                        getOffice:true
+                    })
+                }
+                console.log(_events);
+                //location.hash = '/';
             }
             EventStore.emitChange();
             break;
+
 
         default:
     }
