@@ -45,6 +45,7 @@
     "react-dom": "^0.14.5",
     "react-google-maps": "^4.7.2",
     "react-router": "^1.0.3",
+    "react-toastr": "^2.6.0",
     "reactify": "^1.1.1",
     "withinviewport": "^1.0.0",
     "xmlhttprequest": "^1.8.0"

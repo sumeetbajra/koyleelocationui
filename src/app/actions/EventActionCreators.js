@@ -19,5 +19,11 @@ module.exports = {
             res: res,
             err: err
         });
+    },
+
+    clearCreatedEvent: function() {
+        KoyleeDispatcher.handleViewAction({
+            type: ActionTypes.CLEAR_CREATED_EVENT,
+        }); 
     }
 };

@@ -3,10 +3,13 @@ var CommonConstants = require('../constants/CommonConstants');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var routes = require('../Routes');
+var moment = require('moment');
 var ActionTypes = CommonConstants.ActionTypes;
 var CHANGE_EVENT = 'change';
 var _events = [];
+var _createdEvent = null;
 var _routes = [];
+var _creating = true;
 
 var EventStore = assign({}, EventEmitter.prototype, {
     emitChange: function() {
@@ -23,6 +26,14 @@ var EventStore = assign({}, EventEmitter.prototype, {
 
     getEvents: function() {
         return _events;
+    },
+
+    getCreating: function() {
+        return _creating;
+    },
+
+    getCreatedEvent: function() {
+        return _createdEvent;
     }
 });
 
@@ -44,20 +55,26 @@ EventStore.dispatchToken = KoyleeDispatcher.register(function(payload) {
 
         case ActionTypes.CREATE_EVENT_RESPONSE:
             if(!action.res.error) {
-                _events = action.res;
-                if(_events.eventFromTimestamp) {
-                    localStorage.setItem('payload', {
+                _createdEvent = action.res;
+                if(_createdEvent.eventFromTimestamp) {
+                    localStorage.setItem('payload', JSON.stringify({
                         userId:_events.ownerId,
-                        fromDate: moment(_events.eventFromTimestamp).format('YYYY/MM/DD'),
-                        toDate: moment(_events.eventToTimestamp).format('YYYY/MM/DD'),
+                        fromDate: moment(_createdEvent.eventFromTimestamp).format('YYYY/MM/DD'),
+                        toDate: moment(_createdEvent.eventToTimestamp).format('YYYY/MM/DD'),
                         getAll:true,
                         getHome:true,
                         getOffice:true
-                    })
+                    }))
                 }
-                console.log(_events);
-                //location.hash = '/';
+                _creating = false;
+                console.log(_createdEvent);
+                location.hash = '/';
             }
+            EventStore.emitChange();
+            break;
+
+        case ActionTypes.CLEAR_CREATED_EVENT:
+            _createdEvent = null;
             EventStore.emitChange();
             break;
 

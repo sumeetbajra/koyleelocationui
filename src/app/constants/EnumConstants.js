@@ -3,7 +3,7 @@ var keyMirror = require('keymirror');
 module.exports = {
 
     EventType: [
-        'General', 'Reminder', 'Meeting', 'Conference', 'Dinner', 'Movie', 'Tour', 'Wedding', 'Task', 'Sales', 'Game',
+        'General', 'Reminder', 'Meetings', 'Conference', 'Dinner', 'Movie', 'Tour', 'Wedding', 'Task', 'Sales', 'Game',
         'Sport', 'Party', 'Shopping', 'Breakfast', 'Lunch'
     ],
     

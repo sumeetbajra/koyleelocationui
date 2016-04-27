@@ -7,6 +7,7 @@ import textcomplete from 'jquery-textcomplete';
 import * as EnumConstants from '../constants/EnumConstants';
 import { APIEndpoints } from '../constants/CommonConstants';
 import EventActionCreators from '../actions/EventActionCreators';
+import EventStore from '../stores/EventStore';
 
 class EventCreate extends Component {
 
@@ -15,7 +16,7 @@ class EventCreate extends Component {
         this.state = {
             ownerId: null,
             participants: [],
-            loading: false,
+            creating: false,
             value: '',
             ownerValue: '',
             eventParticipants: [],
@@ -25,18 +26,51 @@ class EventCreate extends Component {
             fromDate: null,
             fromTime: '00:00',
             toDate: null,
-            toTime: '00:00'
+            toTime: '00:00',
+            currReq: null
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.toggleCheckbox = this.toggleCheckbox.bind(this);
         this.changeDate = this.changeDate.bind(this);
         this.changeTime = this.changeTime.bind(this);
         this.removeParticipant = this.removeParticipant.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
     componentDidMount() {
+        EventStore.addChangeListener(this.onChange);
         $.material.checkbox();
-        $('.textcomplete').textcomplete([{
+        var that = this;
+        $('.participant-textcomplete').textcomplete([{
+            match: /(^|\s)(\w{0,})$/,
+            search: function (term, callback) {
+                //kill the request
+                var xhr = $.ajax({
+                    url: APIEndpoints.SEARCH_USER,
+                    headers: {
+                        'Authorization': localStorage.getItem('token'),
+                    },
+                    data: {'s': 8, 'q': term},
+                    method: 'GET',
+                    success: function(res){
+                        var participants = $.map(res.response, function (user, key) {
+                            var fullName = user.firstName + ' ' + user.lastName;
+                            return fullName.toLowerCase().indexOf(term.toLowerCase()) === 0 ? '<i id=' + JSON.stringify(user) + '></i>' + fullName : null;
+                        });
+
+                        callback(participants);
+                    }
+                });
+            },
+            replace: function (word) {
+                that.setState({ 
+                    eventParticipants: that.state.eventParticipants.concat([JSON.parse($(word)[0].id)])
+                });
+                return '';
+            },
+        }]);
+
+        $('.owner-textcomplete').textcomplete([{
             match: /(^|\s)(\w{0,})$/,
             search: function (term, callback) {
                 $.ajax({
@@ -49,7 +83,7 @@ class EventCreate extends Component {
                     success: function(res){
                         var participants = $.map(res.response, function (user, key) {
                             var fullName = user.firstName + ' ' + user.lastName;
-                            return fullName.toLowerCase().indexOf(term.toLowerCase()) === 0 ? fullName : null;
+                            return fullName.toLowerCase().indexOf(term.toLowerCase()) === 0 ? '<i id="' + user.userId + '"></i>' + fullName : null;
                         });
 
                         callback(participants);
@@ -57,9 +91,22 @@ class EventCreate extends Component {
                 });
             },
             replace: function (word) {
-                return word + ' ';
+                that.setState({
+                    owner: $(word)[0].id
+                })
+                return word.replace(/<\/?[^>]+(>|$)/g, "");
             },
         }]);
+    }
+
+    onChange() {
+        this.setState({
+            creating: EventStore.getCreating()
+        })
+    }
+
+    componentWillUnmount() {
+        EventStore.removeChangeListener(this.onChange);
     }
 
     handleSubmit(e) {
@@ -69,7 +116,7 @@ class EventCreate extends Component {
         });
         var payload = {
             desc: document.getElementsByName('eventDescription')[0].value,
-            owner: this.state.ownerId,
+            owner: this.state.owner,
             participant: participants.join(','),
             eventType: document.getElementsByName('eventType')[0].value.toUpperCase(),
             eventStatus: document.getElementsByName('eventStatus')[0].value.toUpperCase(),
@@ -80,6 +127,9 @@ class EventCreate extends Component {
             checkNextDays: this.state.checkNextDays,
             save: this.state.save,
         }
+        this.setState({
+            creating: true
+        });
         EventActionCreators.createEvent(payload);
     }
 
@@ -140,7 +190,7 @@ class EventCreate extends Component {
                     <div className="row">
                         <div className="col-sm-6">
                             <label htmlFor="owner">Owner</label>
-                            <input type="text" name="owner" className="input form-control textcomplete" placeholder="Owner"/>
+                            <input type="text" name="owner" className="input form-control owner-textcomplete" placeholder="Owner"/>
                         </div>
                         <div className="col-sm-6">
                             <label htmlFor="eventType">Event Type</label>
@@ -156,10 +206,10 @@ class EventCreate extends Component {
                     <div className="row">
                         <div className="col-sm-6">
                             <label htmlFor="participants">Participants</label>
-                            <input type="text" name="participants" className="input form-control textcomplete" placeholder="Add participants"/>
+                            <input type="text" name="participants" className="input form-control participant-textcomplete" placeholder="Add participants"/>
                             <div style={{margin: '20px 0 10px'}}>
                                 {this.state.eventParticipants.map( (participant) => {
-                                    return (<span className="selected">{participant.firstName} {participant.lastName} <a href="#" onClick={this.removeParticipant.bind(this, participant.userId)}>X</a></span>);
+                                    return (<span className="selected" key={participant.userId}>{participant.firstName} {participant.lastName} <a href="#" onClick={this.removeParticipant.bind(this, participant.userId)}>X</a></span>);
                                 })}
                             </div>
                         </div>
@@ -229,7 +279,9 @@ class EventCreate extends Component {
                     </div>
                 </div>
                 <div className="form-group">  
-                    <button className="btn btn-primary btn-raised" type="submit">Submit</button>&nbsp;
+                    {this.state.creating ? 
+                        <button className="btn btn-primary btn-raised" type="submit"><i className="fa fa-circle-o-notch fa-spin fa-fw margin-bottom"></i> Creating</button> :
+                        <button className="btn btn-primary btn-raised" type="submit">Submit</button>}&nbsp;
                     <button className="btn btn-danger btn-raised" type="reset">Reset</button>&nbsp;
                     <Link to={'/'} className="btn btn-default btn-raised" type="reset">Back</Link>
                 </div>

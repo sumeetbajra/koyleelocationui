@@ -42,7 +42,8 @@ module.exports = {
        CREATE_EVENT_REQUEST: null,
        CREATE_EVENT_RESPONSE: null,
        CREATE_USER_SESSION_REQUEST: null,
-       CREATE_USER_SESSION_RESPONSE: null
+       CREATE_USER_SESSION_RESPONSE: null,
+       CLEAR_CREATED_EVENT: null
     })
 
 };
