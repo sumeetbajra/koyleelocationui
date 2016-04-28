@@ -42,10 +42,10 @@ var Index = React.createClass({
         var createdEvent = EventStore.getCreatedEvent();
         var title, subtitle;
         if(createdEvent) {
-            if(!createdEvent.eventLocation) {
-                subtitle = 'No location';
-            }else if(!createdEvent.eventFromTimestamp) {
-                subtitle = subtitle.length ? subtitle + ', no time' : 'No time';
+            if(!createdEvent.eventFromTimestamp) {
+                subtitle = 'No time options';
+            }else if(!createdEvent.eventLocation) {
+                subtitle = subtitle ? subtitle + ', no location' : 'No location';
             }
             this.refs.container.success(
               subtitle,
@@ -53,7 +53,9 @@ var Index = React.createClass({
                   timeOut: 3000,
                   extendedTimeOut: 1000
             });
-            EventActionCreators.clearCreatedEvent();
+            setTimeout(function() {
+                EventActionCreators.clearCreatedEvent();
+            }, 0);
         }
     },
 

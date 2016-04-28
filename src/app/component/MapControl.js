@@ -46,17 +46,24 @@ var MapControl = React.createClass({
         EventStore.addChangeListener(this.onChange);
         
         MapActionCreators.getEvents(JSON.parse(localStorage.getItem('payload')));
-        $('#collapse-bar').on('click', function() {
-            if(mapCol.hasClass('col-sm-9')) {
-                mapCol.removeClass('col-sm-9').addClass('col-sm-12');
-                mapControl.hide();
-                google.maps.event.trigger(window.map, "resize");
-            }else{
-                mapCol.removeClass('col-sm-12').addClass('col-sm-9');
-                mapControl.show();
-                google.maps.event.trigger(window.map, "resize");
-            }            
-        });
+        $('#collapse-bar').on('click', this.collapseSideBar);
+    },
+
+    collapseSideBar: function() {
+        if(mapCol.hasClass('col-sm-9')) {
+            mapCol.removeClass('col-sm-9').addClass('col-sm-12');
+            mapControl.hide();
+            google.maps.event.trigger(window.map, "resize");
+        }else{
+            mapCol.removeClass('col-sm-12').addClass('col-sm-9');
+            mapControl.show();
+            google.maps.event.trigger(window.map, "resize");
+        }            
+    },
+
+    componentWillUnmount: function() {
+         EventStore.removeChangeListener(this.onChange);
+         $('#collapse-bar').unbind('click', this.collapseSideBar);
     },
 
     checkboxChangeHandler: function(field, e) {
@@ -97,8 +104,8 @@ var MapControl = React.createClass({
             getOffice: this.state.officeLocation
          }
 
-         localStorage.setItem('uuid', this.state.userId);
-         localStorage.setItem('payload', JSON.stringify(payload));
+        localStorage.setItem('uuid', this.state.userId);
+        localStorage.setItem('payload', JSON.stringify(payload));
         location.hash = "/";
      },
 

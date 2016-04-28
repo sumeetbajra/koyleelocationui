@@ -183,10 +183,16 @@ var Map = React.createClass({
 
                         var latlng = {lat: location.eventLocation.lat, lng: location.eventLocation.lon};
                         var color = that.intToRGB(that.hashCode(userId));
+                        if(location.eventId == JSON.parse(localStorage.getItem('payload')).eventId) {
+                            var size = new google.maps.Size(31.5, 51);
+                        }else {
+                            var size = new google.maps.Size(21, 34);;
+                        }
                         var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + color,
-                        new google.maps.Size(21, 34),
-                        new google.maps.Point(0,0),
-                        new google.maps.Point(10, 34));
+                        null,
+                        null,
+                        null,
+                        size);
                         var userName = JSON.parse(user).firstName + ' ' + JSON.parse(user).lastName;
                         var details = '<b>User Id: </b>' + JSON.parse(user).userId + '<br><b>UserName: </b>' + userName + '<br><b>Event Id: </b>' + location.eventId + '<br><b>Event Type: </b>' + location.eventTitle + '<br><b>Event Description: </b>' + location.eventDescription + '<br><b>From Time: </b>' + new Date(location.eventFromTimestamp) + '<br><b>To Time: </b>' + new Date(location.eventToTimestamp) + '<br><b>Location Name: </b>' + location.eventLocation.locationName;
                         var marker = new google.maps.Marker({

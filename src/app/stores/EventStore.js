@@ -58,17 +58,22 @@ EventStore.dispatchToken = KoyleeDispatcher.register(function(payload) {
                 _createdEvent = action.res;
                 if(_createdEvent.eventFromTimestamp) {
                     localStorage.setItem('payload', JSON.stringify({
-                        userId:_events.ownerId,
+                        eventId: _createdEvent.eventId,
+                        userId: _createdEvent.ownerId,
                         fromDate: moment(_createdEvent.eventFromTimestamp).format('YYYY/MM/DD'),
                         toDate: moment(_createdEvent.eventToTimestamp).format('YYYY/MM/DD'),
                         getAll:true,
                         getHome:true,
                         getOffice:true
-                    }))
+                    }));
+                    localStorage.setItem('uuid', _createdEvent.ownerId);
                 }
                 _creating = false;
                 console.log(_createdEvent);
                 location.hash = '/';
+                setTimeout(function() {
+                    window.location.href = '/';
+                }, 3000);
             }
             EventStore.emitChange();
             break;
